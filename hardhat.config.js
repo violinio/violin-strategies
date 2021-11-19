@@ -85,6 +85,10 @@ module.exports = {
       url: "https://rpc-mumbai.maticvigil.com/",
       accounts: [`0x${PRIVATE_KEY}`],
     },
+    cro: {
+      url: "https://evm-cronos.crypto.org",
+      accounts: [`0x${PRIVATE_KEY}`],
+    },
   },
   etherscan: {
     apiKey: `${ETHERSCAN_APIKEY}`,
