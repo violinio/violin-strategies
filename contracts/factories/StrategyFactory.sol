@@ -90,17 +90,17 @@ contract StrategyFactory is AccessControlEnumerableUpgradeable {
         bool isUpdate
     );
 
-    function initialize(IVaultChef _vaultChef, IZap _zap) external initializer {
+    function initialize(IVaultChef _vaultChef, IZap _zap, address owner) external initializer {
         __AccessControlEnumerable_init();
 
         vaultChef = _vaultChef;
         zap = _zap;
         vaultChef.poolLength(); // validate vaultChef
 
-        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _setupRole(REGISTER_STRATEGY_ROLE, msg.sender);
-        _setupRole(REGISTER_PROJECT_ROLE, msg.sender);
-        _setupRole(CREATE_VAULT_ROLE, msg.sender);
+        _setupRole(DEFAULT_ADMIN_ROLE, owner);
+        _setupRole(REGISTER_STRATEGY_ROLE, owner);
+        _setupRole(REGISTER_PROJECT_ROLE, owner);
+        _setupRole(CREATE_VAULT_ROLE, owner);
     }
 
     function registerStrategyType(

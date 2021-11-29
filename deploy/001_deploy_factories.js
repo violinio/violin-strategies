@@ -26,6 +26,7 @@ const main = async function (hre) {
     const { deployments, getNamedAccounts } = hre;
     const { deploy } = deployments;
     const { deployer } = await getNamedAccounts();
+    const signer = await hre.ethers.getSigner(deployer);
     let vaultchef = VAULTCHEF;
     if (VAULTCHEF === undefined || VAULTCHEF === "") {
         vaultchef = vaultchefs[chain];
@@ -43,7 +44,7 @@ const main = async function (hre) {
             execute: {
                 init: {
                     methodName: 'initialize',
-                    args: [vaultchef, zap]
+                    args: [vaultchef, zap, signer.address]
                 },
             },
         },

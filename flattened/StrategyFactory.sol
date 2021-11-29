@@ -1,6 +1,9 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: MIXED
 
-pragma solidity ^0.8.6;
+// File @openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol@v4.3.2
+// License-Identifier: MIT
+
+pragma solidity ^0.8.0;
 
 /**
  * @dev This is a base contract to aid in writing upgradeable contracts, or any kind of contract that will be deployed
@@ -44,6 +47,11 @@ abstract contract Initializable {
         }
     }
 }
+
+// File @openzeppelin/contracts-upgradeable/utils/structs/EnumerableSetUpgradeable.sol@v4.3.2
+// License-Identifier: MIT
+
+pragma solidity ^0.8.0;
 
 /**
  * @dev Library for managing
@@ -398,6 +406,11 @@ library EnumerableSetUpgradeable {
     }
 }
 
+// File @openzeppelin/contracts-upgradeable/access/IAccessControlUpgradeable.sol@v4.3.2
+// License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+
 /**
  * @dev External interface of AccessControl declared to support ERC165 detection.
  */
@@ -482,6 +495,11 @@ interface IAccessControlUpgradeable {
     function renounceRole(bytes32 role, address account) external;
 }
 
+// File @openzeppelin/contracts-upgradeable/access/IAccessControlEnumerableUpgradeable.sol@v4.3.2
+// License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+
 /**
  * @dev External interface of AccessControlEnumerable declared to support ERC165 detection.
  */
@@ -506,6 +524,11 @@ interface IAccessControlEnumerableUpgradeable is IAccessControlUpgradeable {
      */
     function getRoleMemberCount(bytes32 role) external view returns (uint256);
 }
+
+// File @openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol@v4.3.2
+// License-Identifier: MIT
+
+pragma solidity ^0.8.0;
 
 /**
  * @dev Provides information about the current execution context, including the
@@ -533,6 +556,11 @@ abstract contract ContextUpgradeable is Initializable {
     }
     uint256[50] private __gap;
 }
+
+// File @openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol@v4.3.2
+// License-Identifier: MIT
+
+pragma solidity ^0.8.0;
 
 /**
  * @dev String operations.
@@ -597,6 +625,11 @@ library StringsUpgradeable {
     }
 }
 
+// File @openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol@v4.3.2
+// License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+
 /**
  * @dev Interface of the ERC165 standard, as defined in the
  * https://eips.ethereum.org/EIPS/eip-165[EIP].
@@ -617,6 +650,11 @@ interface IERC165Upgradeable {
      */
     function supportsInterface(bytes4 interfaceId) external view returns (bool);
 }
+
+// File @openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol@v4.3.2
+// License-Identifier: MIT
+
+pragma solidity ^0.8.0;
 
 
 /**
@@ -648,6 +686,15 @@ abstract contract ERC165Upgradeable is Initializable, IERC165Upgradeable {
     }
     uint256[50] private __gap;
 }
+
+// File @openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol@v4.3.2
+// License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+
+
+
+
 
 /**
  * @dev Contract module that allows children to implement role-based access
@@ -860,6 +907,14 @@ abstract contract AccessControlUpgradeable is Initializable, ContextUpgradeable,
     uint256[49] private __gap;
 }
 
+// File @openzeppelin/contracts-upgradeable/access/AccessControlEnumerableUpgradeable.sol@v4.3.2
+// License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+
+
+
+
 /**
  * @dev Extension of {AccessControl} that allows enumerating the members of each role.
  */
@@ -942,6 +997,11 @@ abstract contract AccessControlEnumerableUpgradeable is Initializable, IAccessCo
     uint256[49] private __gap;
 }
 
+// File @openzeppelin/contracts/token/ERC20/IERC20.sol@v4.3.2
+// License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP.
  */
@@ -1020,6 +1080,11 @@ interface IERC20 {
     event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
+// File @openzeppelin/contracts/utils/introspection/IERC165.sol@v4.3.2
+// License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+
 /**
  * @dev Interface of the ERC165 standard, as defined in the
  * https://eips.ethereum.org/EIPS/eip-165[EIP].
@@ -1040,6 +1105,11 @@ interface IERC165 {
      */
     function supportsInterface(bytes4 interfaceId) external view returns (bool);
 }
+
+// File @openzeppelin/contracts/token/ERC1155/IERC1155.sol@v4.3.2
+// License-Identifier: MIT
+
+pragma solidity ^0.8.0;
 
 /**
  * @dev Required interface of an ERC1155 compliant contract, as defined in the
@@ -1160,6 +1230,11 @@ interface IERC1155 is IERC165 {
     ) external;
 }
 
+// File contracts/interfaces/IStrategy.sol
+// License-Identifier: MIT
+
+pragma solidity ^0.8.6;
+
 interface IStrategy {
   /**
      * @notice Gets the token this strategy compounds.
@@ -1216,6 +1291,13 @@ interface IStrategy {
         address to
     ) external;
 }
+
+// File contracts/interfaces/IVaultChefCore.sol
+// License-Identifier: MIT
+
+pragma solidity ^0.8.6;
+
+
 
 /**
  * @notice The VaultChef is a vault management contract that manages vaults, their strategies and the share positions of investors in these vaults.
@@ -1381,6 +1463,11 @@ interface IVaultChefCore is IERC1155 {
     ) external;
 }
 
+// File contracts/interfaces/IMasterChef.sol
+// License-Identifier: MIT
+
+pragma solidity ^0.8.6;
+
 /// @dev The VaultChef implements the masterchef interface for compatibility with third-party tools.
 interface IMasterChef {
     /// @dev An active vault has a dummy allocPoint of 1 while an inactive one has an allocPoint of zero.
@@ -1414,6 +1501,11 @@ interface IMasterChef {
     function emergencyWithdraw(uint256 _pid) external;
 }
 
+// File contracts/interfaces/IERC20Metadata.sol
+// License-Identifier: MIT
+// Based on: https://github.com/OpenZeppelin/openzeppelin-contracts/blob/1b27c13096d6e4389d62e7b0766a1db53fbb3f1b/contracts/token/ERC20/extensions/IERC20Metadata.sol
+
+pragma solidity ^0.8.6;
 /**
  * @dev Interface for the optional metadata functions from the ERC20 standard.
  *
@@ -1435,6 +1527,13 @@ interface IERC20Metadata {
      */
     function decimals() external view returns (uint8);
 }
+
+// File contracts/interfaces/IVaultChefWrapper.sol
+// License-Identifier: MIT
+
+pragma solidity ^0.8.6;
+
+
 
 interface IVaultChefWrapper is IMasterChef, IERC20Metadata{
      /**
@@ -1471,10 +1570,22 @@ interface IVaultChefWrapper is IMasterChef, IERC20Metadata{
 
 }
 
+// File contracts/interfaces/IVaultChef.sol
+// License-Identifier: MIT
+
+pragma solidity ^0.8.6;
+
+
 /// @notice Interface for derivative protocols.
 interface IVaultChef is IVaultChefWrapper, IVaultChefCore {
     function owner() external view returns (address);
 }
+
+// File contracts/interfaces/ISubFactory.sol
+// License-Identifier: MIT
+
+pragma solidity ^0.8.6;
+
 
 interface ISubFactory {
     function deployStrategy(
@@ -1484,6 +1595,11 @@ interface ISubFactory {
         bytes calldata strategyData
     ) external returns (IStrategy);
 }
+
+// File contracts/interfaces/IZapHandler.sol
+// License-Identifier: MIT
+
+pragma solidity ^0.8.6;
 
 /// @notice The IZap interface allows contracts to swap a token for another token without having to directly interact with verbose AMMs directly.
 /// @notice It furthermore allows to zap to and from an LP pair within a single transaction.
@@ -1515,6 +1631,12 @@ interface IZapHandler {
     function owner() external view returns (address);
 }
 
+// File contracts/interfaces/IZap.sol
+// License-Identifier: MIT
+
+pragma solidity ^0.8.6;
+
+
 /// @notice The IZap interface allows contracts to swap a token for another token without having to directly interact with verbose AMMs directly.
 /// @notice It furthermore allows to zap to and from an LP pair within a single transaction.
 interface IZap {
@@ -1544,6 +1666,17 @@ interface IZap {
 
     function implementation() external view returns (IZapHandler);
 }
+
+// File contracts/factories/StrategyFactory.sol
+// License-Identifier: MIT
+
+pragma solidity ^0.8.6;
+
+
+
+
+
+
 
 /// @notice The strategy factory is a utility contracts used by Violin to deploy new strategies more swiftly and securely.
 /// @notice The admin can register strategy types together with a SubFactory that creates instances of the relevant strategy type.
@@ -1625,17 +1758,17 @@ contract StrategyFactory is AccessControlEnumerableUpgradeable {
         bool isUpdate
     );
 
-    function initialize(IVaultChef _vaultChef, IZap _zap) external initializer {
+    function initialize(IVaultChef _vaultChef, IZap _zap, address owner) external initializer {
         __AccessControlEnumerable_init();
 
         vaultChef = _vaultChef;
         zap = _zap;
         vaultChef.poolLength(); // validate vaultChef
 
-        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _setupRole(REGISTER_STRATEGY_ROLE, msg.sender);
-        _setupRole(REGISTER_PROJECT_ROLE, msg.sender);
-        _setupRole(CREATE_VAULT_ROLE, msg.sender);
+        _setupRole(DEFAULT_ADMIN_ROLE, owner);
+        _setupRole(REGISTER_STRATEGY_ROLE, owner);
+        _setupRole(REGISTER_PROJECT_ROLE, owner);
+        _setupRole(CREATE_VAULT_ROLE, owner);
     }
 
     function registerStrategyType(

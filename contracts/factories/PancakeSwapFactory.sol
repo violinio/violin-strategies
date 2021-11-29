@@ -43,7 +43,7 @@ contract PancakeSwapFactory is ISubFactory {
         return strategy;
     }
 
-    function _validateMasterchef(IPancakeSwapMC masterchef, IERC20 underlyingToken, uint256 pid) internal view {
+    function _validateMasterchef(IPancakeSwapMC masterchef, IERC20 /*underlyingToken*/, uint256 pid) internal view {
         try  masterchef.poolLength() returns (
             uint256 length
         ) {
