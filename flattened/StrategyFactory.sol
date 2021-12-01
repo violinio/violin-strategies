@@ -2121,4 +2121,8 @@ contract StrategyFactory is AccessControlEnumerableUpgradeable {
         }
         return types;
     }
+    
+    function setVaulchef(IVaultChef newVaultChef) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        vaultChef = newVaultChef;
+    }
 }

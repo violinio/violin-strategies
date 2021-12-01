@@ -11,6 +11,8 @@ const vaultchefs = {
     "celo": "0x76cb8cd4b0a55C6dE2bd864dEd2B55140bB56C18",
     "ftm": "0x76cb8cd4b0a55C6dE2bd864dEd2B55140bB56C18",
     "cro": "0x2926FaBf8eF4880B2C32Fc84B1CA7C38ee045F9b",
+    "fuse": "0xA5BCB9FdDE71e393978278999425ac42DA393d3D",
+    "aurora": "0xA5BCB9FdDE71e393978278999425ac42DA393d3D",
 };
 
 const zaps = {
@@ -18,6 +20,8 @@ const zaps = {
     "celo": "0xAfEf94984f3C3665e72F1a8d4634659621dA18A0",
     "ftm": "0xAfEf94984f3C3665e72F1a8d4634659621dA18A0",
     "cro": "0xAfEf94984f3C3665e72F1a8d4634659621dA18A0",
+    "fuse": "0xAfEf94984f3C3665e72F1a8d4634659621dA18A0",
+    "aurora": "0xAfEf94984f3C3665e72F1a8d4634659621dA18A0",
 
 };
 
@@ -65,7 +69,9 @@ const main = async function (hre) {
     });
 
     if (!(await factoryContract.isSubfactory(pcsFactory.address))) {
-        await factoryContract.registerStrategyType("PCS_MASTERCHEF", pcsFactory.address);
+        console.log('registering pancakeswap factory...');
+        await factoryContract.connect(signer).registerStrategyType("PANCAKESWAP_MC4", pcsFactory.address);
+        console.log("registered pancakeswap factory");
     }
 
     const sushiMiniChefV2Factory = await deploy("SushiMiniChefV2Factory", {
@@ -76,10 +82,29 @@ const main = async function (hre) {
     });
 
     if (!(await factoryContract.isSubfactory(sushiMiniChefV2Factory.address))) {
-        await factoryContract.registerStrategyType("SUSHI_MINICHEF_V2", sushiMiniChefV2Factory.address);
+        console.log('registering sushi minichef v2 factory...');
+        await factoryContract.connect(signer).registerStrategyType("SUSHI_MINICHEF_V2", sushiMiniChefV2Factory.address);
+        console.log("registered sushi minichef v2 factory");
     }
 
     console.log("sushi StrategyFactory deployed to:", sushiMiniChefV2Factory.address);
+
+
+
+    const fuseFiStakingFactory = await deploy("FuseFiStakingFactory", {
+        from: deployer,
+        args: [factory.address, zap],
+        deterministicDeployment: "0x9c22ff5f21f0b81b113e63f7db6da94fedef11b2119b4088b89664fb9a3cb659",// salt
+        log: true
+    });
+
+    if (!(await factoryContract.isSubfactory(fuseFiStakingFactory.address))) {
+        console.log('registering fusefi factory...');
+        await factoryContract.connect(signer).registerStrategyType("FUSEFI_MULTI_REWARDS", fuseFiStakingFactory.address);
+        console.log("registered fusefi factory");
+    }
+
+    console.log("FuseFiStakingFactory deployed to:", fuseFiStakingFactory.address);
 
     try {
         await verify(hre, chain, "factory.implementation", []);
@@ -90,11 +115,14 @@ const main = async function (hre) {
     } catch {
 
     }
+
     try {
         await verify(hre, chain, sushiMiniChefV2Factory.address, [factory.address, zap]);
-    } catch {
+    } catch {}
 
-    }
+    try {
+        await verify(hre, chain, fuseFiStakingFactory.address, [factory.address, zap]);
+    } catch {}
 }
 
 async function verify(hre, chain, contract, args) {
