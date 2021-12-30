@@ -88,10 +88,9 @@ const main = async function (hre) {
 
     if (!(await factoryContract.isSubfactory(stakingRewardsFactory.address))) {
         console.log('registering staking rewards factory...');
-        await factoryContract.connect(signer).registerStrategyType("STAKING_REWARDS", stakingRewardsFactory.address);
+        await factoryContract.connect(signer).registerStrategyType("STAKING_REWARDS2", stakingRewardsFactory.address);
         console.log("registered staking rewards factory");
     }
-
 
     const pcsStakingFactory = await deploy("PancakeSwapStakingFactory", {
         from: deployer,

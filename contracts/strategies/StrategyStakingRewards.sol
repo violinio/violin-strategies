@@ -38,6 +38,7 @@ contract StrategyStakingRewards is BaseStrategy {
     }
 
     function _deposit(uint256 amount) internal override {
+        underlyingToken.approve(address(staking), amount);
         staking.stake(amount);
     }
 
