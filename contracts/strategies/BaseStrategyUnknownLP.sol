@@ -9,19 +9,17 @@ import "../interfaces/IStrategy.sol";
 import "../interfaces/IZap.sol";
 
 /**
- * @notice The BaseStrategy implements reusable logic for all Violin strategies that earn some single asset "rewardToken".
+ * @notice The BaseStrategyUnknownLP implements reusable logic for all Violin strategies that earn some single asset "rewardToken".
  * @dev It exposes a very simple interface which the actual strategies can implement.
- * @dev The zapper contract does not have excessive privileges and withdrawals should always be possible even if it reverts.
+ * @dev The zap logic is delegated to the strategy implementation.
  */
-abstract contract BaseStrategy is IStrategy {
+abstract contract BaseStrategyUnknownLP is IStrategy {
     using SafeERC20 for IERC20;
     /// @dev Set to true once _initializeBase is called by the implementation.
     bool initialized;
 
     /// @dev The vaultchef contract this strategy is managed by.
     IVaultChef public vaultchef;
-    /// @dev The zapper contract to swap earned for underlying tokens.
-    IZap public zap;
     /// @dev The token that is actually staked into the underlying protocol.
     IERC20 public override underlyingToken;
     /// @dev The token the underlying protocol gives as a reward.
@@ -42,14 +40,12 @@ abstract contract BaseStrategy is IStrategy {
     /// @notice Initializes the base strategy variables, should be called together with contract deployment by a contract factory.
     function _initializeBase(
         IVaultChef _vaultchef,
-        IZap _zap,
         IERC20 _underlyingToken,
         IERC20 _rewardToken
     ) internal {
         assert(!initialized); // No implementation should call _initializeBase without using the initialize modifier, hence we can assert.
         initialized = true;
         vaultchef = _vaultchef;
-        zap = _zap;
         underlyingToken = _underlyingToken;
         rewardToken = _rewardToken;
     }
@@ -93,16 +89,16 @@ abstract contract BaseStrategy is IStrategy {
         if (rewardToken != underlyingToken) {
             uint256 rewardBalance = rewardToken.balanceOf(address(this));
             if (rewardBalance > 0) {
-                rewardToken.approve(address(zap), rewardBalance);
-                zap.swapERC20Fast(rewardToken, underlyingToken, rewardBalance);
+                _zapToStakingToken(rewardBalance);
             }
         }
+
         uint256 toDeposit = underlyingToken.balanceOf(address(this));
         if (toDeposit > 0) {
             _deposit(toDeposit);
         }
     }
-
+    
     /// @notice Withdraws stuck ERC-20 tokens inside the strategy contract, cannot be staking or underlying.
     function inCaseTokensGetStuck(
         IERC20 token,
@@ -141,6 +137,9 @@ abstract contract BaseStrategy is IStrategy {
     }
 
     ///** INTERFACE FOR IMPLEMENTATIONS **/
+    
+    /// @notice Should swap the `rewardTokenAmount` to the staking token.
+    function _zapToStakingToken(uint256 rewardTokenAmount) internal virtual;
 
     /// @notice Should withdraw all staked funds to the strategy.
     function _panic() internal virtual;
