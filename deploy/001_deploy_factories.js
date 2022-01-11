@@ -15,6 +15,7 @@ const vaultchefs = {
     "fuse": "0xA5BCB9FdDE71e393978278999425ac42DA393d3D",
     "aurora": "0xA5BCB9FdDE71e393978278999425ac42DA393d3D",
     "harmony": "0xA5BCB9FdDE71e393978278999425ac42DA393d3D",
+    "poly": "0xF2188e17A3B33902CEAA645F8470904Eb0ce943f",
 };
 
 const zaps = {
@@ -26,6 +27,7 @@ const zaps = {
     "fuse": "0xAfEf94984f3C3665e72F1a8d4634659621dA18A0",
     "aurora": "0xAfEf94984f3C3665e72F1a8d4634659621dA18A0",
     "harmony": "0xAfEf94984f3C3665e72F1a8d4634659621dA18A0",
+    "poly": "0xAfEf94984f3C3665e72F1a8d4634659621dA18A0", 
 
 };
 
@@ -62,16 +64,21 @@ const main = async function (hre) {
     console.log("StrategyFactory deployed to:", factory.address);
     console.log("StrategyFactory implementation deployed to:", factory.implementation);
 
-
     const factoryFactory = await ethers.getContractFactory("StrategyFactory");
     const factoryContract = await factoryFactory.attach(factory.address);
     
+    if(await factoryContract.vaultChef() == "0x0000000000000000000000000000000000000000") {
+        await factoryContract.connect(signer).initialize(vaultchef, zap, signer.address);
+    }
+
     const pcsFactory = await deploy("PancakeSwapFactory", {
         from: deployer,
         args: [factory.address, zap],
         deterministicDeployment: "0x9c22ff5f21f0b81b113e63f7db6da94fedef11b2119b4088b89664fb9a3cb659",// salt
         log: true
     });
+
+
 
     if (!(await factoryContract.isSubfactory(pcsFactory.address))) {
         console.log('registering pancakeswap factory...');
@@ -90,6 +97,26 @@ const main = async function (hre) {
         console.log('registering staking rewards factory...');
         await factoryContract.connect(signer).registerStrategyType("STAKING_REWARDS2", stakingRewardsFactory.address);
         console.log("registered staking rewards factory");
+    }
+
+
+    if (chain === "avax") {
+        const thorusFactory = await deploy("ThorusFactory", {
+            from: deployer,
+            args: [factory.address, zap],
+            deterministicDeployment: "0x9c22ff5f21f0b81b113e63f7db6da94fedef11b2119b4088b89664fb9a3cb659",// salt
+            log: true
+        });
+
+        if (!(await factoryContract.isSubfactory(thorusFactory.address))) {
+            console.log('registering thorusFactory factory...');
+            await factoryContract.connect(signer).registerStrategyType("THORUS", thorusFactory.address);
+            console.log("registered thorusFactory factory");
+        }
+
+        try {
+            await verify(hre, chain, thorusFactory.address, [factory.address, zap]);
+        } catch { }
     }
 
     const pcsStakingFactory = await deploy("PancakeSwapStakingFactory", {
@@ -172,10 +199,25 @@ const main = async function (hre) {
         } catch { }
     }
 
+    if (chain === "poly") {
+        const cryptoRaidersFactory = await deploy("CryptoRaidersFactory", {
+            from: deployer,
+            args: [factory.address, zap],
+            deterministicDeployment: "0x9c22ff5f21f0b81b113e63f7db6da94fedef11b2119b4088b89664fb9a3cb659",// salt
+            log: true
+        });
 
-    try {
-        await verify(hre, chain, factory.implementation, []);
-    } catch { }
+        if (!(await factoryContract.isSubfactory(cryptoRaidersFactory.address))) {
+            console.log('registering cryptoRaidersFactory...');
+            await factoryContract.connect(signer).registerStrategyType("CRYPTO_RAIDERS2", cryptoRaidersFactory.address);
+            console.log("registered cryptoRaidersFactory");
+        }
+        console.log("cryptoRaidersFactory deployed to:", cryptoRaidersFactory.address);
+
+        try {
+            await verify(hre, chain, cryptoRaidersFactory.address, [factory.address, zap]);
+        } catch { }
+    }
 
     try {
         await verify(hre, chain, pcsFactory.address, [factory.address, zap]);
@@ -183,6 +225,10 @@ const main = async function (hre) {
 
     }
 
+
+    try {
+        await verify(hre, chain, factory.implementation, []);
+    } catch { }
     try {
         await verify(hre, chain, sushiMiniChefV2Factory.address, [factory.address, zap]);
     } catch { }
